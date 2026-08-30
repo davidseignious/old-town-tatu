@@ -1,0 +1,1 @@
+Do not consider the image repair complete until the verified image branch is deployed successfully.
