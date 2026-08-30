@@ -3,45 +3,40 @@
 @tailwind utilities;
 
 @layer base {
-      html {
-              scroll-behavior: smooth;
-      }
+  html {
+    scroll-behavior: smooth;
+  }
 
   body {
-          @apply bg-bone-50 text-ink-950;
+    @apply bg-bone-50 text-ink-950;
   }
 }
 
 @layer components {
-      .btn-primary {
-              @apply inline-flex items-center justify-center px-8 py-4 bg-ink-950 text-bone-50 font-sans text-sm tracking-wide uppercase rounded-full hover:bg-oxblood-600 transition-colors duration-300;
-      }
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-8 py-4 bg-ink-950 text-bone-50 font-sans text-sm tracking-wide uppercase rounded-full hover:bg-oxblood-600 transition-colors duration-300;
+  }
 
   .btn-ghost {
-          @apply inline-flex items-center justify-center px-8 py-4 border border-ink-950/30 text-ink-950 font-sans text-sm tracking-wide uppercase rounded-full hover:border-ink-950 transition-colors duration-300;
+    @apply inline-flex items-center justify-center px-8 py-4 border border-ink-950/30 text-ink-950 font-sans text-sm tracking-wide uppercase rounded-full hover:border-ink-950 transition-colors duration-300;
   }
 
   .field-label {
-          @apply block font-sans text-xs uppercase tracking-widest text-ink-500 mb-2;
+    @apply block font-sans text-xs uppercase tracking-widest text-ink-500 mb-2;
   }
 
   .field-input {
-          @apply w-full bg-transparent border-b border-ink-950/25 py-3 font-sans text-ink-950 placeholder-ink-500/60 focus:outline-none focus:border-oxblood-600 transition-colors;
+    @apply w-full bg-transparent border-b border-ink-950/25 py-3 font-sans text-ink-950 placeholder-ink-500/60 focus:outline-none focus:border-oxblood-600 transition-colors;
   }
 }
 
-/* Scroll-reveal: elements start hidden, .in-view fades/slides them up */
+/* Content must always be visible. Reveal animation is progressive enhancement only. */
 .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-}
-.reveal.in-view {
-      opacity: 1;
-      transform: translateY(0);
+  opacity: 1;
+  transform: translateY(0);
 }
 
 ::selection {
-      background: #8A2C30;
-      color: #FBF8F2;
+  background: #8A2C30;
+  color: #FBF8F2;
 }
