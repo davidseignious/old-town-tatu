@@ -126,6 +126,7 @@ export default function TonyWulfmanArt() {
         />
         <meta property="og:url" content={SITE_URL} />
         <meta property="og:type" content="website" />
+        <meta property="og:image" content={`${SITE_URL}images/tony-tattooing.webp`} />
         <meta name="theme-color" content="#120F0D" />
         <link rel="canonical" href={SITE_URL} />
         <link rel="icon" href={FAVICON_DATA_URI} />
@@ -186,15 +187,15 @@ export default function TonyWulfmanArt() {
       </header>
 
       <main id="top" className="overflow-x-hidden pb-24 pt-20 md:pb-0">
-        <section className="relative min-h-[90vh] overflow-hidden bg-ink-950 text-bone-50">
+        <section className="relative overflow-hidden bg-ink-950 text-bone-50">
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute -right-32 top-10 h-[34rem] w-[34rem] rounded-full border border-brass-400/10" />
             <div className="absolute -right-10 top-32 h-[22rem] w-[22rem] rounded-full border border-brass-400/10" />
             <img src={LOGO_DATA_URI} alt="" className="absolute -bottom-24 -right-24 w-[34rem] opacity-[0.035] sm:w-[42rem]" />
           </div>
 
-          <div className="relative mx-auto grid min-h-[90vh] max-w-8xl items-center gap-16 px-6 py-24 md:px-10 lg:grid-cols-[1.35fr_.65fr] lg:py-28">
-            <div>
+          <div className="relative mx-auto grid min-h-[88vh] max-w-8xl items-center gap-14 px-6 py-20 md:px-10 lg:grid-cols-[1.15fr_.85fr] lg:py-24">
+            <div className="relative z-10">
               <Reveal>
                 <p className="mb-8 font-sans text-xs uppercase tracking-[0.28em] text-brass-400">
                   Tony Wulfman Art · Chicago
@@ -202,7 +203,7 @@ export default function TonyWulfmanArt() {
               </Reveal>
 
               <Reveal delay={100}>
-                <h1 className="max-w-5xl font-serif text-[14vw] leading-[0.9] tracking-[-0.04em] sm:text-7xl md:text-8xl lg:text-[6.4rem]">
+                <h1 className="max-w-5xl font-serif text-[14vw] leading-[0.9] tracking-[-0.04em] sm:text-7xl md:text-8xl lg:text-[5.9rem]">
                   Your body keeps
                   <br />
                   the story. <span className="italic text-brass-400">Make it</span>
@@ -230,27 +231,39 @@ export default function TonyWulfmanArt() {
               </Reveal>
             </div>
 
-            <Reveal delay={250}>
-              <aside className="lg:justify-self-end">
-                <div className="max-w-sm border border-bone-50/15 bg-bone-50/[0.04] p-7 backdrop-blur sm:p-8">
-                  <p className="font-sans text-[10px] uppercase tracking-[0.26em] text-brass-400">Tony Wulfman Art</p>
-                  <h2 className="mt-3 font-serif text-3xl">Chicago Studio</h2>
-                  <p className="mt-5 flex gap-3 font-sans text-sm leading-relaxed text-bone-100/70">
-                    <MapPin size={17} className="mt-0.5 shrink-0 text-brass-400" />
-                    {STUDIO_ADDRESS}
-                  </p>
-                  <a
-                    href={`tel:${STUDIO_PHONE.replace(/\D/g, '')}`}
-                    className="mt-4 flex items-center gap-3 font-sans text-sm text-bone-100/70 transition-colors hover:text-bone-50"
-                  >
-                    <Phone size={17} className="text-brass-400" /> {STUDIO_PHONE}
-                  </a>
-                  <div className="my-7 h-px bg-bone-50/10" />
-                  <a href="#booking" className="font-sans text-xs uppercase tracking-[0.2em] text-brass-300 transition-colors hover:text-brass-400">
-                    Request a session with Tony ↓
-                  </a>
+            <Reveal delay={180} className="lg:justify-self-end">
+              <div className="w-full max-w-xl">
+                <div className="relative overflow-hidden border border-bone-50/15 bg-ink-900 shadow-2xl">
+                  <img
+                    src="/images/tony-tattooing.webp"
+                    alt="Tony Wulfman tattooing a client in his Chicago studio"
+                    className="aspect-[4/3] w-full object-cover"
+                    fetchPriority="high"
+                  />
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink-950 via-ink-950/75 to-transparent px-6 pb-6 pt-20">
+                    <p className="font-sans text-[10px] uppercase tracking-[0.24em] text-brass-300">In the chair</p>
+                    <p className="mt-2 max-w-sm font-serif text-2xl leading-tight">Focused work. Relaxed room. No rushed experience.</p>
+                  </div>
                 </div>
-              </aside>
+
+                <div className="relative -mt-px grid gap-0 border border-bone-50/15 bg-bone-50/[0.04] sm:grid-cols-2">
+                  <div className="p-5 sm:border-r sm:border-bone-50/10">
+                    <p className="font-sans text-[10px] uppercase tracking-[0.22em] text-brass-400">Chicago Studio</p>
+                    <p className="mt-2 flex gap-2 font-sans text-xs leading-relaxed text-bone-100/70">
+                      <MapPin size={15} className="mt-0.5 shrink-0 text-brass-400" /> {STUDIO_ADDRESS}
+                    </p>
+                  </div>
+                  <div className="p-5">
+                    <p className="font-sans text-[10px] uppercase tracking-[0.22em] text-brass-400">Direct contact</p>
+                    <a
+                      href={`tel:${STUDIO_PHONE.replace(/\D/g, '')}`}
+                      className="mt-2 flex items-center gap-2 font-sans text-xs text-bone-100/70 transition-colors hover:text-bone-50"
+                    >
+                      <Phone size={15} className="text-brass-400" /> {STUDIO_PHONE}
+                    </a>
+                  </div>
+                </div>
+              </div>
             </Reveal>
           </div>
         </section>
@@ -325,7 +338,25 @@ export default function TonyWulfmanArt() {
         </section>
 
         <section id="about" className="bg-ink-900 py-24 text-bone-50 md:py-28">
-          <div className="mx-auto grid max-w-8xl gap-16 px-6 md:px-10 lg:grid-cols-[1fr_.9fr] lg:items-center">
+          <div className="mx-auto grid max-w-8xl gap-16 px-6 md:px-10 lg:grid-cols-[.82fr_1.18fr] lg:items-center">
+            <Reveal>
+              <div className="relative mx-auto max-w-md lg:mx-0">
+                <div className="overflow-hidden border border-bone-50/15">
+                  <img
+                    src="/images/tony-client-session.webp"
+                    alt="Tony Wulfman talking with a client during a tattoo session"
+                    loading="lazy"
+                    className="aspect-[3/4] w-full object-cover"
+                  />
+                </div>
+                <div className="relative -mt-12 ml-6 border border-brass-400/25 bg-bone-50 p-6 text-ink-950 shadow-2xl sm:ml-12">
+                  <p className="font-serif text-4xl leading-none text-brass-500">“</p>
+                  <blockquote className="mt-1 font-serif text-xl leading-snug">{REVIEW.quote}</blockquote>
+                  <p className="mt-4 font-sans text-xs font-semibold">{REVIEW.name} · {REVIEW.source}</p>
+                </div>
+              </div>
+            </Reveal>
+
             <div>
               <Reveal>
                 <p className="mb-5 font-sans text-xs uppercase tracking-[0.3em] text-brass-400">About Tony</p>
@@ -360,17 +391,6 @@ export default function TonyWulfmanArt() {
                 </div>
               </Reveal>
             </div>
-
-            <Reveal delay={160}>
-              <div className="border border-brass-400/25 bg-bone-50 p-8 text-ink-950 sm:p-10">
-                <p className="font-serif text-6xl leading-none text-brass-500">“</p>
-                <blockquote className="mt-2 font-serif text-2xl leading-snug sm:text-3xl">{REVIEW.quote}</blockquote>
-                <div className="mt-8 border-t border-ink-950/10 pt-5">
-                  <p className="font-sans text-sm font-semibold">{REVIEW.name}</p>
-                  <p className="mt-1 font-sans text-xs text-ink-500">{REVIEW.source}</p>
-                </div>
-              </div>
-            </Reveal>
           </div>
         </section>
 
@@ -380,6 +400,42 @@ export default function TonyWulfmanArt() {
               <p className="mb-5 font-sans text-xs uppercase tracking-[0.3em] text-oxblood-600">The Standard</p>
               <blockquote className="font-serif text-3xl leading-tight tracking-tight md:text-5xl">“{PHILOSOPHY_QUOTE}”</blockquote>
             </Reveal>
+          </div>
+        </section>
+
+        <section className="overflow-hidden bg-ink-950 text-bone-50">
+          <div className="mx-auto grid max-w-8xl lg:grid-cols-[.78fr_1.22fr]">
+            <Reveal className="relative min-h-[32rem]">
+              <img
+                src="/images/tony-chicago-studio.webp"
+                alt="Tony Wulfman outside his Chicago tattoo studio at dusk"
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink-950/80 via-transparent to-transparent" />
+              <p className="absolute bottom-6 left-6 font-sans text-[10px] uppercase tracking-[0.25em] text-bone-50/80">
+                Chicago · Irving Park Road
+              </p>
+            </Reveal>
+
+            <div className="flex items-center px-6 py-20 md:px-12 lg:px-16 lg:py-24">
+              <Reveal>
+                <p className="font-sans text-xs uppercase tracking-[0.3em] text-brass-400">The Studio</p>
+                <h2 className="mt-5 max-w-3xl font-serif text-4xl leading-tight tracking-tight md:text-6xl">
+                  A Chicago setting that feels as personal as the work.
+                </h2>
+                <p className="mt-7 max-w-xl font-sans text-base leading-relaxed text-bone-100/70">
+                  The experience matters too. Tony works from a character-filled Chicago studio where the goal is simple: make the client comfortable,
+                  take the time the piece needs, and leave with work that feels worth wearing for life.
+                </p>
+                <div className="mt-8 flex flex-wrap items-center gap-4">
+                  <a href="#booking" className="btn-primary bg-brass-500 text-ink-950 hover:bg-brass-400">Request a Session</a>
+                  <p className="flex items-center gap-2 font-sans text-xs text-bone-100/70">
+                    <MapPin size={15} className="text-brass-400" /> {STUDIO_ADDRESS}
+                  </p>
+                </div>
+              </Reveal>
+            </div>
           </div>
         </section>
 
@@ -439,7 +495,7 @@ export default function TonyWulfmanArt() {
               <div className="mx-auto max-w-2xl text-center">
                 <p className="mb-4 font-sans text-xs uppercase tracking-[0.3em] text-brass-400">Request a Session</p>
                 <h2 className="font-serif text-4xl tracking-tight md:text-6xl">Bring the idea. Tony will help shape the piece.</h2>
-                <p className="mt-5 font-sans text-sm leading-relaxed text-bone-100/65">
+                <p className="mt-5 font-sans text-sm leading-relaxed text-bone-100/70">
                   Give enough detail to understand the project. Tony can then follow up directly about direction, timing, availability, and price.
                 </p>
               </div>
@@ -534,7 +590,7 @@ export default function TonyWulfmanArt() {
                     >
                       {loading ? 'Sending...' : 'Submit Request'}
                     </button>
-                    <p className="mt-4 font-sans text-xs text-bone-100/45">
+                    <p className="mt-4 font-sans text-xs text-bone-100/50">
                       Prefer email?{' '}
                       <a href={`mailto:${BOOKING_EMAIL}`} className="underline underline-offset-4 hover:text-bone-50">
                         {BOOKING_EMAIL}
