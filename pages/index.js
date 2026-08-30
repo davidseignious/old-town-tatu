@@ -5,14 +5,13 @@ import { LOGO_DATA_URI, FAVICON_DATA_URI } from '../lib/logo';
 import Reveal from '../components/Reveal';
 import InstagramEmbed from '../components/InstagramEmbed';
 import {
+  SITE_NAME,
+  SITE_URL,
   IG_HANDLE,
   IG_URL,
   BOOKING_EMAIL,
-  SHOP_NAME,
-  SHOP_URL,
-  TONY_SHOP_URL,
-  SHOP_ADDRESS,
-  SHOP_PHONE,
+  STUDIO_ADDRESS,
+  STUDIO_PHONE,
   PORTFOLIO_POSTS,
   PORTFOLIO_FILTERS,
   PHILOSOPHY_QUOTE,
@@ -28,8 +27,8 @@ const NAV_LINKS = [
 ];
 
 const TRUST_ITEMS = [
-  ['Chicago', 'Tattoo artist'],
-  ['Old Town Tatu', '3313 W Irving Park Rd'],
+  ['Tony Wulfman Art', 'Personal tattoo portfolio'],
+  ['Chicago', '3313 W Irving Park Rd'],
   ['Fine line · Portraits', 'Cover-ups · Custom'],
   ['Direct booking', 'Talk with Tony'],
 ];
@@ -37,10 +36,10 @@ const TRUST_ITEMS = [
 const REVIEW = {
   quote: 'He didn’t rush. He took his time with his work and we were all very happy with the results.',
   name: 'Amanda S.',
-  source: 'Client review featured by Old Town Tatu',
+  source: 'Client review',
 };
 
-export default function OldTownTatu() {
+export default function TonyWulfmanArt() {
   const [filter, setFilter] = useState('All');
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
@@ -94,22 +93,19 @@ export default function OldTownTatu() {
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: 'Tony Wulfman',
+    alternateName: SITE_NAME,
     jobTitle: 'Tattoo Artist',
-    url: TONY_SHOP_URL,
+    url: SITE_URL,
+    email: BOOKING_EMAIL,
+    telephone: STUDIO_PHONE,
     sameAs: [IG_URL],
-    worksFor: {
-      '@type': 'LocalBusiness',
-      name: SHOP_NAME,
-      url: SHOP_URL,
-      telephone: SHOP_PHONE,
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: '3313 W Irving Park Rd',
-        addressLocality: 'Chicago',
-        addressRegion: 'IL',
-        postalCode: '60618',
-        addressCountry: 'US',
-      },
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: '3313 W Irving Park Rd',
+      addressLocality: 'Chicago',
+      addressRegion: 'IL',
+      postalCode: '60618',
+      addressCountry: 'US',
     },
   };
 
@@ -118,32 +114,32 @@ export default function OldTownTatu() {
   return (
     <>
       <Head>
-        <title>Tony Wulfman | Chicago Tattoo Artist at Old Town Tatu</title>
+        <title>Tony Wulfman Art | Chicago Tattoo Artist</title>
         <meta
           name="description"
-          content="Explore Tony Wulfman's tattoo work and request a custom session at Old Town Tatu in Chicago. Fine line, portraits, cover-ups, black & grey, and custom tattoo work."
+          content="Tony Wulfman Art is the official portfolio and booking site for Chicago tattoo artist Tony Wulfman. Explore fine line, portraits, cover-ups, black & grey realism, and custom work."
         />
-        <meta property="og:title" content="Tony Wulfman | Chicago Tattoo Artist" />
+        <meta property="og:title" content="Tony Wulfman Art | Chicago Tattoo Artist" />
         <meta
           property="og:description"
-          content="Fine line, portraits, cover-ups, black & grey, and custom tattoo work at Old Town Tatu in Chicago."
+          content="Explore Tony Wulfman’s tattoo portfolio and request a custom session in Chicago."
         />
+        <meta property="og:url" content={SITE_URL} />
+        <meta property="og:type" content="website" />
         <meta name="theme-color" content="#120F0D" />
+        <link rel="canonical" href={SITE_URL} />
         <link rel="icon" href={FAVICON_DATA_URI} />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }} />
       </Head>
 
       <header className="fixed inset-x-0 top-0 z-50 border-b border-ink-950/10 bg-bone-50/90 backdrop-blur-xl">
         <div className="mx-auto flex h-20 max-w-8xl items-center justify-between px-6 md:px-10">
-          <a href="#top" className="flex items-center gap-3" aria-label="Tony Wulfman home">
+          <a href="#top" className="flex items-center gap-3" aria-label="Tony Wulfman Art home">
             <img src={LOGO_DATA_URI} alt="" className="h-10 w-10 object-contain" />
             <span className="hidden sm:block">
-              <span className="block font-serif text-lg leading-none tracking-tight">Tony Wulfman</span>
+              <span className="block font-serif text-lg leading-none tracking-tight">Tony Wulfman Art</span>
               <span className="mt-1 block font-sans text-[10px] uppercase tracking-[0.22em] text-ink-500">
-                Tattoo Artist · Old Town Tatu
+                Chicago Tattoo Artist
               </span>
             </span>
           </a>
@@ -191,21 +187,17 @@ export default function OldTownTatu() {
 
       <main id="top" className="overflow-x-hidden pt-20">
         <section className="relative min-h-[90vh] overflow-hidden bg-ink-950 text-bone-50">
-          <div className="absolute inset-0 pointer-events-none">
+          <div className="pointer-events-none absolute inset-0">
             <div className="absolute -right-32 top-10 h-[34rem] w-[34rem] rounded-full border border-brass-400/10" />
             <div className="absolute -right-10 top-32 h-[22rem] w-[22rem] rounded-full border border-brass-400/10" />
-            <img
-              src={LOGO_DATA_URI}
-              alt=""
-              className="absolute -bottom-24 -right-24 w-[34rem] opacity-[0.035] sm:w-[42rem]"
-            />
+            <img src={LOGO_DATA_URI} alt="" className="absolute -bottom-24 -right-24 w-[34rem] opacity-[0.035] sm:w-[42rem]" />
           </div>
 
           <div className="relative mx-auto grid min-h-[90vh] max-w-8xl items-center gap-16 px-6 py-24 md:px-10 lg:grid-cols-[1.35fr_.65fr] lg:py-28">
             <div>
               <Reveal>
                 <p className="mb-8 font-sans text-xs uppercase tracking-[0.28em] text-brass-400">
-                  Tony Wulfman · Old Town Tatu · Chicago
+                  Tony Wulfman Art · Chicago
                 </p>
               </Reveal>
 
@@ -221,7 +213,7 @@ export default function OldTownTatu() {
 
               <Reveal delay={200}>
                 <p className="mt-8 max-w-2xl font-sans text-base leading-relaxed text-bone-100/72 sm:text-lg">
-                  Fine line, portraits, cover-ups, black &amp; grey, and custom tattoo work shaped around your idea —
+                  Fine line, portraits, cover-ups, black &amp; grey realism, and custom tattoo work shaped around your idea —
                   with the time and attention a permanent piece deserves.
                 </p>
               </Reveal>
@@ -241,26 +233,21 @@ export default function OldTownTatu() {
             <Reveal delay={250}>
               <aside className="lg:justify-self-end">
                 <div className="max-w-sm border border-bone-50/15 bg-bone-50/[0.04] p-7 backdrop-blur sm:p-8">
-                  <p className="font-sans text-[10px] uppercase tracking-[0.26em] text-brass-400">Currently tattooing at</p>
-                  <h2 className="mt-3 font-serif text-3xl">Old Town Tatu</h2>
+                  <p className="font-sans text-[10px] uppercase tracking-[0.26em] text-brass-400">Tony Wulfman Art</p>
+                  <h2 className="mt-3 font-serif text-3xl">Chicago Studio</h2>
                   <p className="mt-5 flex gap-3 font-sans text-sm leading-relaxed text-bone-100/70">
                     <MapPin size={17} className="mt-0.5 shrink-0 text-brass-400" />
-                    {SHOP_ADDRESS}
+                    {STUDIO_ADDRESS}
                   </p>
                   <a
-                    href={`tel:${SHOP_PHONE.replace(/\D/g, '')}`}
+                    href={`tel:${STUDIO_PHONE.replace(/\D/g, '')}`}
                     className="mt-4 flex items-center gap-3 font-sans text-sm text-bone-100/70 transition-colors hover:text-bone-50"
                   >
-                    <Phone size={17} className="text-brass-400" /> {SHOP_PHONE}
+                    <Phone size={17} className="text-brass-400" /> {STUDIO_PHONE}
                   </a>
                   <div className="my-7 h-px bg-bone-50/10" />
-                  <a
-                    href={TONY_SHOP_URL}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="font-sans text-xs uppercase tracking-[0.2em] text-brass-300 transition-colors hover:text-brass-400"
-                  >
-                    View Tony on Old Town Tatu ↗
+                  <a href="#booking" className="font-sans text-xs uppercase tracking-[0.2em] text-brass-300 transition-colors hover:text-brass-400">
+                    Request a session with Tony ↓
                   </a>
                 </div>
               </aside>
@@ -343,19 +330,19 @@ export default function OldTownTatu() {
               <Reveal>
                 <p className="mb-5 font-sans text-xs uppercase tracking-[0.3em] text-brass-400">About Tony</p>
                 <h2 className="max-w-3xl font-serif text-4xl leading-tight tracking-tight md:text-6xl">
-                  Custom work without the generic tattoo-shop attitude.
+                  Custom work built around the person wearing it.
                 </h2>
               </Reveal>
 
               <Reveal delay={120}>
                 <div className="mt-8 max-w-2xl space-y-5 font-sans text-base leading-relaxed text-bone-100/72">
                   <p>
-                    Old Town Tatu features Tony for fine line work, cover-ups, and portraits. His approach starts with
-                    listening to the idea, refining the direction, and making sure the final piece feels like it belongs on you.
+                    Tony Wulfman is a Chicago tattoo artist whose work spans fine line, portraits, cover-ups, black &amp; grey realism,
+                    religious imagery, geometric work, and fully custom concepts.
                   </p>
                   <p>
-                    The studio itself is one of Chicago&apos;s more distinctive tattoo spaces, located on Irving Park Road in a
-                    historic building with a long tattoo history of its own.
+                    His approach starts with listening to the idea, refining the direction, and making sure the final piece feels intentional,
+                    personal, and right for the body it will live on.
                   </p>
                 </div>
               </Reveal>
@@ -436,10 +423,7 @@ export default function OldTownTatu() {
                       className="flex w-full items-center justify-between py-6 text-left font-serif text-xl md:text-2xl"
                     >
                       {item.q}
-                      <ChevronDown
-                        size={22}
-                        className={`ml-4 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-                      />
+                      <ChevronDown size={22} className={`ml-4 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
                     </button>
                     {isOpen && <p className="max-w-2xl pb-6 font-sans text-sm leading-relaxed text-ink-500">{item.a}</p>}
                   </div>
@@ -456,8 +440,7 @@ export default function OldTownTatu() {
                 <p className="mb-4 font-sans text-xs uppercase tracking-[0.3em] text-brass-400">Request a Session</p>
                 <h2 className="font-serif text-4xl tracking-tight md:text-6xl">Bring the idea. Tony will help shape the piece.</h2>
                 <p className="mt-5 font-sans text-sm leading-relaxed text-bone-100/65">
-                  Give enough detail to understand the project. Tony can then follow up directly about direction, timing, availability,
-                  and price.
+                  Give enough detail to understand the project. Tony can then follow up directly about direction, timing, availability, and price.
                 </p>
               </div>
             </Reveal>
@@ -570,12 +553,12 @@ export default function OldTownTatu() {
               <div className="flex items-center gap-3">
                 <img src={LOGO_DATA_URI} alt="" className="h-10 w-10 object-contain" />
                 <div>
-                  <p className="font-serif text-xl">Tony Wulfman</p>
-                  <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-ink-500">Tattoo Artist · Old Town Tatu</p>
+                  <p className="font-serif text-xl">Tony Wulfman Art</p>
+                  <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-ink-500">Chicago Tattoo Artist</p>
                 </div>
               </div>
               <p className="mt-6 max-w-xl font-sans text-sm leading-relaxed text-ink-500">
-                Custom tattoo work in Chicago at {SHOP_NAME}, {SHOP_ADDRESS}.
+                Custom tattoo work in Chicago. Studio appointments at {STUDIO_ADDRESS}.
               </p>
             </div>
 
@@ -583,8 +566,8 @@ export default function OldTownTatu() {
               <a href={`mailto:${BOOKING_EMAIL}`} className="flex items-center gap-2 hover:text-oxblood-600">
                 <Mail size={16} /> {BOOKING_EMAIL}
               </a>
-              <a href={`tel:${SHOP_PHONE.replace(/\D/g, '')}`} className="flex items-center gap-2 hover:text-oxblood-600">
-                <Phone size={16} /> {SHOP_PHONE}
+              <a href={`tel:${STUDIO_PHONE.replace(/\D/g, '')}`} className="flex items-center gap-2 hover:text-oxblood-600">
+                <Phone size={16} /> {STUDIO_PHONE}
               </a>
               <a href={IG_URL} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-oxblood-600">
                 <Instagram size={16} /> @{IG_HANDLE}
@@ -592,7 +575,7 @@ export default function OldTownTatu() {
             </div>
           </div>
           <p className="mx-auto mt-10 max-w-8xl px-6 font-sans text-xs text-ink-500/55 md:px-10">
-            © {new Date().getFullYear()} Tony Wulfman. Tattoo appointments at Old Town Tatu, Chicago.
+            © {new Date().getFullYear()} Tony Wulfman Art. All rights reserved.
           </p>
         </footer>
 
