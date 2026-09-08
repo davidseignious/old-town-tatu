@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#110d18" />
+<title>VERAMOR — See love. Know it’s real.</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/davidseignious/old-town-tatu@veramor-beta-assets/veramor/style.css">
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><div class="vlogo">V</div><div>VERAMOR<div class="tag">See love. Know it’s real.</div></div></div>
+    <button class="iconBtn" id="safetyBtn" aria-label="Safety center">🛡️</button>
+  </header>
+  <div class="banner" id="modeBanner"></div>
+
+  <section class="screen active" id="welcome">
+    <div class="hero">
+      <div class="eyebrow">Real presence. Better dating.</div>
+      <h1><span class="grad">See love.</span><br>Know it’s real.</h1>
+      <p>VERAMOR is designed around fresh camera capture, live-presence prompts, strict anti-solicitation rules, and mutual consent before conversation.</p>
+    </div>
+    <div class="card stack">
+      <div class="row"><span class="pill good">✓ 18+ only</span><span class="pill good">✓ Camera-first</span><span class="pill warn">Beta</span></div>
+      <button class="btn primary" id="startSignup">Create account</button>
+      <button class="btn secondary" id="startLogin">I already have an account</button>
+      <div class="tiny">By continuing, you agree to the Terms, Community Guidelines, and Privacy Notice. VERAMOR does not claim identity verification until a real verification review is completed.</div>
+    </div>
+  </section>
+
+  <section class="screen" id="auth">
+    <h2 class="sectionTitle" id="authTitle">Create your account</h2>
+    <div class="card stack">
+      <label>Email<input id="email" type="email" autocomplete="email" placeholder="you@example.com"></label>
+      <label>Password<input id="password" type="password" autocomplete="current-password" minlength="8" placeholder="8+ characters"></label>
+      <label id="dobLabel">Date of birth<input id="birthdate" type="date"></label>
+      <div class="tiny" id="authNote">You must be at least 18. Your birthdate is used to enforce age eligibility.</div>
+      <button class="btn primary" id="authSubmit">Continue</button>
+      <button class="btn ghost" id="authBack">Back</button>
+    </div>
+  </section>
+
+  <section class="screen" id="onboarding">
+    <h2 class="sectionTitle">Build a profile that feels human</h2>
+    <div class="card stack">
+      <div class="row between"><strong>1. Take your live profile photo</strong><span id="photoStatus" class="pill warn">Required</span></div>
+      <div class="capture" id="photoCapture"><video id="camera" playsinline autoplay muted></video><canvas id="snapshot" hidden></canvas><div class="guide"></div></div>
+      <div class="cameraControls"><button class="btn secondary" id="openCamera">Open camera</button><button class="btn primary" id="takePhoto" disabled>Take photo</button></div>
+      <div class="tiny">Your main photo must be captured through the camera in this session. Gallery uploads are not accepted for the primary photo in the beta.</div>
+    </div>
+    <div class="card stack">
+      <strong>2. Tell people about you</strong>
+      <label>First name<input id="displayName" maxlength="40" placeholder="Amina"></label>
+      <div class="split"><label>City<input id="city" maxlength="60" placeholder="Chicago"></label><label>Occupation<input id="occupation" maxlength="80" placeholder="Creative strategist"></label></div>
+      <label>What are you looking for?<select id="intent"><option>Long-term relationship</option><option>Relationship, open to short</option><option>Short-term, open to long</option><option>Figuring it out</option></select></label>
+      <label>Bio<textarea id="bio" maxlength="400" placeholder="A little about you — no links, handles, or paid-content funnels."></textarea></label>
+      <label>Interests<input id="interests" placeholder="Live music, food spots, photography"></label>
+      <label>Prompt: A small thing that tells me a lot about someone<textarea id="prompt1" maxlength="260" placeholder="How they treat people when there is nothing to gain."></textarea></label>
+      <label>Prompt: The quickest way to win me over<textarea id="prompt2" maxlength="260" placeholder="Make me laugh and actually pick a place for dinner."></textarea></label>
+    </div>
+    <div class="card stack">
+      <div class="row between"><strong>3. Fresh presence check</strong><span id="presenceStatus" class="pill warn">Required</span></div>
+      <div class="mini">Record a short camera video answering this randomized prompt:</div>
+      <div class="vibe" id="presencePrompt">What made you smile this week?</div>
+      <div class="capture"><video id="presenceCamera" playsinline autoplay muted></video><div class="guide"></div></div>
+      <div class="cameraControls"><button class="btn secondary" id="presenceOpen">Open camera</button><button class="btn primary" id="recordPresence" disabled>Record 5 sec</button></div>
+      <div class="progress"><i id="presenceProgress"></i></div>
+      <div class="tiny">This proves a fresh camera session was submitted. It is not labeled “identity verified” unless a real verification process approves it.</div>
+    </div>
+    <button class="btn primary" id="finishProfile">Activate profile</button>
+  </section>
+
+  <section class="screen" id="discover">
+    <div class="row between"><div><div class="eyebrow">Verified presence preferred</div><h2 class="sectionTitle" style="margin-top:4px">Discover</h2></div><div class="pill" id="likesLeft">10 likes left</div></div>
+    <div id="discoverHost"></div>
+  </section>
+
+  <section class="screen" id="matches">
+    <div class="row between"><h2 class="sectionTitle">Matches</h2><span class="pill" id="matchCount">0</span></div>
+    <div class="card flat" id="matchList"></div>
+  </section>
+
+  <section class="screen" id="profile">
+    <h2 class="sectionTitle">My profile</h2>
+    <div id="myProfileCard"></div>
+    <div class="card stack">
+      <div class="row between"><strong>Profile Passport</strong><span class="pill warn">Plus preview</span></div>
+      <div class="mini">Copy a clean version of your VERAMOR profile to use on another dating app.</div>
+      <button class="btn secondary" id="copyPassport">Copy my profile</button>
+    </div>
+    <div class="card stack"><strong>Settings & account</strong><button class="btn secondary" id="pauseProfile">Pause profile</button><button class="btn secondary" id="exportData">Export my data</button><button class="btn danger" id="deleteAccount">Delete account</button></div>
+  </section>
+</div>
+
+<nav class="nav" id="nav">
+  <button data-go="discover"><span class="ico">✦</span>Discover</button>
+  <button data-go="matches"><span class="ico">♡</span>Matches</button>
+  <button data-go="profile"><span class="ico">◉</span>Profile</button>
+  <button id="navSafety"><span class="ico">🛡</span>Safety</button>
+</nav>
+<div class="toast" id="toast"></div>
+
+<div class="modal" id="safetyModal"><div class="sheet">
+  <div class="row between"><h2>Safety Center</h2><button class="iconBtn" data-close="safetyModal">✕</button></div>
+  <div class="card flat stack"><strong>VERAMOR’s beta rules</strong><div class="mini">No minors. No paid-content funnels. No sexual solicitation. No impersonation. No harassment. No external links in profiles or chats. Main profile photos are camera-captured.</div></div>
+  <div class="card flat stack"><strong>Trust labels mean exactly what they say</strong><div class="mini"><b>Live capture</b> means the main photo came from an in-app camera session. <b>Presence submitted</b> means a fresh video prompt was uploaded. <b>Verified</b> is reserved for a real review or verification provider.</div></div>
+  <div class="card flat stack"><strong>Meeting someone?</strong><div class="mini">Meet in public, tell someone where you are, keep your own transportation, and leave if anything feels wrong. For immediate danger, contact local emergency services.</div></div>
+  <button class="btn secondary" data-close="safetyModal">Close</button>
+</div></div>
+
+<div class="modal" id="reportModal"><div class="sheet">
+  <div class="row between"><h2>Report profile</h2><button class="iconBtn" data-close="reportModal">✕</button></div>
+  <div class="stack"><label>Reason<select id="reportReason"><option>Fake or automated profile</option><option>Sexual solicitation or paid content</option><option>Harassment or threats</option><option>Under 18</option><option>Impersonation</option><option>Other</option></select></label><label>Details<textarea id="reportDetails" maxlength="500" placeholder="Tell us what happened."></textarea></label><button class="btn danger" id="submitReport">Report and block</button></div>
+</div></div>
+
+<div class="modal" id="matchModal"><div class="sheet" style="text-align:center">
+  <div class="successBurst">💜</div><h2>It’s a match</h2><p class="muted" id="matchText">You both liked each other.</p><button class="btn primary" id="matchContinue">Start Chemistry Check</button><button class="btn ghost" data-close="matchModal">Keep discovering</button>
+</div></div>
+
+<div class="modal" id="chatModal"><div class="sheet" style="max-height:94vh">
+  <div class="row between"><div><h2 style="margin:0" id="chatName">Chat</h2><div class="mini" id="chatStatus"></div></div><button class="iconBtn" data-close="chatModal">✕</button></div>
+  <div id="chemistryBox" class="card stack"></div>
+  <div class="chat" id="chatMessages"></div>
+  <div class="chatbar"><input id="chatInput" maxlength="1500" placeholder="Message…"><button id="sendMessage">➤</button></div>
+  <div class="row" style="margin-top:10px"><button class="btn secondary" id="unmatchBtn">Unmatch</button><button class="btn danger" id="chatReportBtn">Report</button></div>
+</div></div>
+
+<script src="https://cdn.jsdelivr.net/gh/davidseignious/old-town-tatu@veramor-beta-assets/veramor/app1.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/davidseignious/old-town-tatu@veramor-beta-assets/veramor/app2.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/davidseignious/old-town-tatu@veramor-beta-assets/veramor/app3.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/davidseignious/old-town-tatu@veramor-beta-assets/veramor/app4.js"></script>
+</body>
+</html>
