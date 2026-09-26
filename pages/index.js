@@ -203,7 +203,7 @@ export default function TonyWulfmanArt() {
               <div className="w-full max-w-xl">
                 <div className="relative overflow-hidden border border-bone-50/15 bg-ink-900 shadow-2xl">
                   <img
-                    src="/images/tony-hq-1.jpg"
+                    src="https://res.cloudinary.com/hxnwueko/image/upload/v1788485635/tony-tattooing-session.webp"
                     alt="Tony Wulfman tattooing a client in his Chicago studio"
                     className="aspect-[4/3] w-full object-cover"
                     fetchPriority="high"
@@ -354,7 +354,7 @@ export default function TonyWulfmanArt() {
               <div className="relative mx-auto max-w-md lg:mx-0">
                 <div className="overflow-hidden border border-bone-50/15">
                   <img
-                    src="/images/tony-hq-2.jpg"
+                    src="https://res.cloudinary.com/hxnwueko/image/upload/v1788485741/tony-with-client.webp"
                     alt="Tony Wulfman talking with a client during a tattoo session"
                     loading="lazy"
                     className="aspect-[3/4] w-full object-cover"
@@ -418,7 +418,7 @@ export default function TonyWulfmanArt() {
           <div className="mx-auto grid max-w-8xl lg:grid-cols-[.78fr_1.22fr]">
             <Reveal className="relative min-h-[32rem]">
               <img
-                src="/images/tony-hq-3.jpg"
+                src="https://res.cloudinary.com/hxnwueko/image/upload/v1788485853/tony-outside-old-town.webp"
                 alt="Tony Wulfman outside his Chicago tattoo studio at dusk"
                 loading="lazy"
                 className="absolute inset-0 h-full w-full object-cover"
