@@ -43,21 +43,6 @@ export default function TonyWulfmanArt() {
   const [filter, setFilter] = useState('All');
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    placement: '',
-    size: '',
-    colorPreference: '',
-    date: '',
-    time: '',
-    references: '',
-    description: '',
-  });
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   const instagramCarouselRef = useRef(null);
 
   const scrollInstagram = (direction) => {
@@ -71,31 +56,6 @@ export default function TonyWulfmanArt() {
     () => (filter === 'All' ? PORTFOLIO_POSTS : PORTFOLIO_POSTS.filter((post) => post.tag === filter)),
     [filter]
   );
-
-  const handleChange = (event) => {
-    setFormData((current) => ({ ...current, [event.target.name]: event.target.value }));
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-    setError('');
-
-    try {
-      const response = await fetch('/api/book-appointment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Something went wrong');
-      setSubmitted(true);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const personSchema = {
     '@context': 'https://schema.org',
@@ -162,7 +122,7 @@ export default function TonyWulfmanArt() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <a href="#booking" className="btn-primary !hidden !px-6 !py-3 !text-xs md:!inline-flex">
+            <a href="https://venue.ink/@tonywulfmanart" target="_blank" rel="noreferrer" className="btn-primary !hidden !px-6 !py-3 !text-xs md:!inline-flex">
               Start a Piece
             </a>
             <button
@@ -186,7 +146,7 @@ export default function TonyWulfmanArt() {
                   {link.label}
                 </a>
               ))}
-              <a href="#booking" onClick={() => setMenuOpen(false)} className="btn-primary mt-2 text-xs">
+              <a href="https://venue.ink/@tonywulfmanart" target="_blank" rel="noreferrer" onClick={() => setMenuOpen(false)} className="btn-primary mt-2 text-xs">
                 Start a Piece
               </a>
             </div>
@@ -229,7 +189,7 @@ export default function TonyWulfmanArt() {
 
               <Reveal delay={300}>
                 <div className="mt-10 flex flex-wrap gap-4">
-                  <a href="#booking" className="btn-primary bg-brass-500 text-ink-950 hover:bg-brass-400">
+                  <a href="https://venue.ink/@tonywulfmanart" target="_blank" rel="noreferrer" className="btn-primary bg-brass-500 text-ink-950 hover:bg-brass-400">
                     Start Your Piece
                   </a>
                   <a href="#work" className="btn-ghost border-bone-50/25 text-bone-50 hover:border-bone-50">
@@ -480,7 +440,7 @@ export default function TonyWulfmanArt() {
                   take the time the piece needs, and leave with work that feels worth wearing for life.
                 </p>
                 <div className="mt-8 flex flex-wrap items-center gap-4">
-                  <a href="#booking" className="btn-primary bg-brass-500 text-ink-950 hover:bg-brass-400">Request a Session</a>
+                  <a href="https://venue.ink/@tonywulfmanart" target="_blank" rel="noreferrer" className="btn-primary bg-brass-500 text-ink-950 hover:bg-brass-400">Request a Session</a>
                   <p className="flex items-center gap-2 font-sans text-xs text-bone-100/70">
                     <MapPin size={15} className="text-brass-400" /> {STUDIO_ADDRESS}
                   </p>
@@ -541,16 +501,18 @@ export default function TonyWulfmanArt() {
         </section>
 
         <section id="booking" className="bg-ink-950 py-24 text-bone-50 md:py-28">
-          <div className="mx-auto max-w-4xl px-6 text-center md:px-10">
+          <div className="mx-auto max-w-5xl px-6 text-center md:px-10">
             <Reveal>
-              <p className="mb-4 font-sans text-xs uppercase tracking-[0.3em] text-brass-400">Book With Tony</p>
-              <h2 className="font-serif text-4xl tracking-tight md:text-6xl">Ready to book your tattoo?</h2>
+              <p className="mb-4 font-sans text-xs uppercase tracking-[0.3em] text-brass-400">Book with Tony</p>
+              <h2 className="mx-auto max-w-3xl font-serif text-4xl tracking-tight md:text-6xl">
+                Ready to start your piece?
+              </h2>
               <p className="mx-auto mt-5 max-w-2xl font-sans text-sm leading-relaxed text-bone-100/70">
-                Tony uses Venue Ink for appointment booking. Use the booking link below to view availability and request your session.
+                Tony’s appointments are handled through his official Venue Ink booking page.
               </p>
-              <div className="mt-10">
+              <div className="mt-9">
                 <a
-                  href="https://venue.ink/"
+                  href="https://venue.ink/@tonywulfmanart"
                   target="_blank"
                   rel="noreferrer"
                   className="btn-primary bg-brass-500 text-ink-950 hover:bg-brass-400"
@@ -595,10 +557,12 @@ export default function TonyWulfmanArt() {
         </footer>
 
         <a
-          href="#booking"
+          href="https://venue.ink/@tonywulfmanart"
+          target="_blank"
+          rel="noreferrer"
           className="fixed bottom-4 left-4 right-4 z-40 flex items-center justify-center rounded-full bg-brass-500 px-6 py-4 font-sans text-xs font-semibold uppercase tracking-[0.16em] text-ink-950 shadow-2xl md:hidden"
         >
-          Start Your Piece
+          Book on Venue Ink
         </a>
       </main>
     </>
