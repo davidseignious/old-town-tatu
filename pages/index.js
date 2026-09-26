@@ -243,7 +243,7 @@ export default function TonyWulfmanArt() {
               <div className="w-full max-w-xl">
                 <div className="relative overflow-hidden border border-bone-50/15 bg-ink-900 shadow-2xl">
                   <img
-                    src="https://res.cloudinary.com/hxnwueko/image/upload/v1788485635/tony-tattooing-session.webp"
+                    src="/images/tony-hq-1.jpg"
                     alt="Tony Wulfman tattooing a client in his Chicago studio"
                     className="aspect-[4/3] w-full object-cover"
                     fetchPriority="high"
@@ -394,7 +394,7 @@ export default function TonyWulfmanArt() {
               <div className="relative mx-auto max-w-md lg:mx-0">
                 <div className="overflow-hidden border border-bone-50/15">
                   <img
-                    src="https://res.cloudinary.com/hxnwueko/image/upload/v1788485741/tony-with-client.webp"
+                    src="/images/tony-hq-2.jpg"
                     alt="Tony Wulfman talking with a client during a tattoo session"
                     loading="lazy"
                     className="aspect-[3/4] w-full object-cover"
@@ -458,7 +458,7 @@ export default function TonyWulfmanArt() {
           <div className="mx-auto grid max-w-8xl lg:grid-cols-[.78fr_1.22fr]">
             <Reveal className="relative min-h-[32rem]">
               <img
-                src="https://res.cloudinary.com/hxnwueko/image/upload/v1788485853/tony-outside-old-town.webp"
+                src="/images/tony-hq-3.jpg"
                 alt="Tony Wulfman outside his Chicago tattoo studio at dusk"
                 loading="lazy"
                 className="absolute inset-0 h-full w-full object-cover"
@@ -541,116 +541,24 @@ export default function TonyWulfmanArt() {
         </section>
 
         <section id="booking" className="bg-ink-950 py-24 text-bone-50 md:py-28">
-          <div className="mx-auto max-w-5xl px-6 md:px-10">
+          <div className="mx-auto max-w-4xl px-6 text-center md:px-10">
             <Reveal>
-              <div className="mx-auto max-w-2xl text-center">
-                <p className="mb-4 font-sans text-xs uppercase tracking-[0.3em] text-brass-400">Request a Session</p>
-                <h2 className="font-serif text-4xl tracking-tight md:text-6xl">Bring the idea. Tony will help shape the piece.</h2>
-                <p className="mt-5 font-sans text-sm leading-relaxed text-bone-100/70">
-                  Give enough detail to understand the project. Tony can then follow up directly about direction, timing, availability, and price.
-                </p>
+              <p className="mb-4 font-sans text-xs uppercase tracking-[0.3em] text-brass-400">Book With Tony</p>
+              <h2 className="font-serif text-4xl tracking-tight md:text-6xl">Ready to book your tattoo?</h2>
+              <p className="mx-auto mt-5 max-w-2xl font-sans text-sm leading-relaxed text-bone-100/70">
+                Tony uses Venue Ink for appointment booking. Use the booking link below to view availability and request your session.
+              </p>
+              <div className="mt-10">
+                <a
+                  href="https://venue.ink/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn-primary bg-brass-500 text-ink-950 hover:bg-brass-400"
+                >
+                  Book on Venue Ink
+                </a>
               </div>
             </Reveal>
-
-            {submitted ? (
-              <Reveal>
-                <div className="mx-auto mt-14 max-w-2xl border border-brass-500/30 p-10 text-center">
-                  <h3 className="font-serif text-3xl">Request sent.</h3>
-                  <p className="mt-4 font-sans text-sm leading-relaxed text-bone-100/70">
-                    Check your email for confirmation. Tony can follow up after reviewing the details you submitted.
-                  </p>
-                </div>
-              </Reveal>
-            ) : (
-              <Reveal delay={100}>
-                <form onSubmit={handleSubmit} className="mt-14 grid gap-x-10 gap-y-8 md:grid-cols-2">
-                  <div>
-                    <label className="field-label !text-brass-300">Name</label>
-                    <input required name="name" value={formData.name} onChange={handleChange} className={darkField} />
-                  </div>
-                  <div>
-                    <label className="field-label !text-brass-300">Email</label>
-                    <input required type="email" name="email" value={formData.email} onChange={handleChange} className={darkField} />
-                  </div>
-                  <div>
-                    <label className="field-label !text-brass-300">Phone</label>
-                    <input required type="tel" name="phone" value={formData.phone} onChange={handleChange} className={darkField} />
-                  </div>
-                  <div>
-                    <label className="field-label !text-brass-300">Placement</label>
-                    <input
-                      required
-                      name="placement"
-                      placeholder="e.g. forearm, ribs, calf"
-                      value={formData.placement}
-                      onChange={handleChange}
-                      className={`${darkField} placeholder-bone-50/30`}
-                    />
-                  </div>
-                  <div>
-                    <label className="field-label !text-brass-300">Approximate Size</label>
-                    <select name="size" value={formData.size} onChange={handleChange} className={darkField}>
-                      <option value="" className="text-ink-950">Select one</option>
-                      <option value="Small (palm-sized or less)" className="text-ink-950">Small (palm-sized or less)</option>
-                      <option value="Medium (forearm / calf)" className="text-ink-950">Medium (forearm / calf)</option>
-                      <option value="Large (half sleeve / back panel)" className="text-ink-950">Large (half sleeve / back panel)</option>
-                      <option value="Full sleeve or larger" className="text-ink-950">Full sleeve or larger</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="field-label !text-brass-300">Color or Black &amp; Grey</label>
-                    <select name="colorPreference" value={formData.colorPreference} onChange={handleChange} className={darkField}>
-                      <option value="" className="text-ink-950">Select one</option>
-                      <option value="Black & Grey" className="text-ink-950">Black &amp; Grey</option>
-                      <option value="Color" className="text-ink-950">Color</option>
-                      <option value="Not sure yet" className="text-ink-950">Not sure yet</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="field-label !text-brass-300">Preferred Date</label>
-                    <input required type="date" name="date" value={formData.date} onChange={handleChange} className={darkField} />
-                  </div>
-                  <div>
-                    <label className="field-label !text-brass-300">Preferred Time</label>
-                    <input required type="time" name="time" value={formData.time} onChange={handleChange} className={darkField} />
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="field-label !text-brass-300">Reference Links (optional)</label>
-                    <input name="references" value={formData.references} onChange={handleChange} className={darkField} />
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="field-label !text-brass-300">Tell Tony About the Piece</label>
-                    <textarea
-                      required
-                      rows={5}
-                      name="description"
-                      placeholder="What is the idea? What matters about it? First tattoo or adding to existing work?"
-                      value={formData.description}
-                      onChange={handleChange}
-                      className={`${darkField} resize-none placeholder-bone-50/30`}
-                    />
-                  </div>
-
-                  {error && <p className="md:col-span-2 font-sans text-sm text-oxblood-500">{error}</p>}
-
-                  <div className="mt-3 text-center md:col-span-2">
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      className="btn-primary bg-brass-500 text-ink-950 hover:bg-brass-400 disabled:opacity-50"
-                    >
-                      {loading ? 'Sending...' : 'Submit Request'}
-                    </button>
-                    <p className="mt-4 font-sans text-xs text-bone-100/50">
-                      Prefer email?{' '}
-                      <a href={`mailto:${BOOKING_EMAIL}`} className="underline underline-offset-4 hover:text-bone-50">
-                        {BOOKING_EMAIL}
-                      </a>
-                    </p>
-                  </div>
-                </form>
-              </Reveal>
-            )}
           </div>
         </section>
 
