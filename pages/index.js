@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import Head from 'next/head';
-import { ChevronDown, Instagram, Mail, MapPin, Phone } from 'lucide-react';
+import { ChevronDown, ChevronLeft, ChevronRight, Instagram, Mail, MapPin, Phone } from 'lucide-react';
 import { LOGO_DATA_URI, FAVICON_DATA_URI } from '../lib/logo';
 import Reveal from '../components/Reveal';
 import InstagramEmbed from '../components/InstagramEmbed';
@@ -58,6 +58,14 @@ export default function TonyWulfmanArt() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const instagramCarouselRef = useRef(null);
+
+  const scrollInstagram = (direction) => {
+    const carousel = instagramCarouselRef.current;
+    if (!carousel) return;
+    const amount = Math.min(carousel.clientWidth * 0.9, 440);
+    carousel.scrollBy({ left: direction * amount, behavior: 'smooth' });
+  };
 
   const visiblePosts = useMemo(
     () => (filter === 'All' ? PORTFOLIO_POSTS : PORTFOLIO_POSTS.filter((post) => post.tag === filter)),
@@ -320,18 +328,61 @@ export default function TonyWulfmanArt() {
             </div>
           </Reveal>
 
-          <div className="columns-1 gap-6 sm:columns-2 lg:columns-3 [column-fill:_balance]">
+          <Reveal delay={120}>
+            <div className="mb-6 flex items-center justify-between gap-4">
+              <a
+                href={IG_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 font-sans text-sm text-ink-600 transition-colors hover:text-oxblood-600"
+              >
+                <Instagram size={18} />
+                <span>Follow @{IG_HANDLE}</span>
+              </a>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => scrollInstagram(-1)}
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-ink-950/20 transition-colors hover:border-ink-950 hover:bg-ink-950 hover:text-bone-50"
+                  aria-label="Previous Instagram posts"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => scrollInstagram(1)}
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-ink-950/20 transition-colors hover:border-ink-950 hover:bg-ink-950 hover:text-bone-50"
+                  aria-label="Next Instagram posts"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </div>
+            </div>
+          </Reveal>
+
+          <div
+            ref={instagramCarouselRef}
+            className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-4"
+            style={{ scrollbarWidth: 'thin' }}
+            aria-label="Tony Wulfman Instagram photo carousel"
+          >
             {visiblePosts.map((post, index) => (
-              <Reveal key={post.id} delay={(index % 3) * 70} className="mb-6 break-inside-avoid">
-                <InstagramEmbed postId={post.id} />
+              <Reveal
+                key={post.id}
+                delay={(index % 3) * 60}
+                className="w-[88vw] max-w-[430px] shrink-0 snap-start sm:w-[420px]"
+              >
+                <div className="overflow-hidden border border-ink-950/10 bg-white shadow-sm">
+                  <InstagramEmbed postId={post.id} />
+                </div>
               </Reveal>
             ))}
           </div>
 
           <Reveal>
-            <div className="mt-14 text-center">
+            <div className="mt-10 text-center">
               <a href={IG_URL} target="_blank" rel="noreferrer" className="btn-ghost">
-                <Instagram size={16} className="mr-2" /> More on Instagram
+                <Instagram size={16} className="mr-2" /> View @{IG_HANDLE} on Instagram
               </a>
             </div>
           </Reveal>
