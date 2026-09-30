@@ -4,6 +4,7 @@ import { ChevronDown, ChevronLeft, ChevronRight, Instagram, Mail, MapPin, Phone 
 import { LOGO_DATA_URI, FAVICON_DATA_URI } from '../lib/logo';
 import Reveal from '../components/Reveal';
 import InstagramEmbed from '../components/InstagramEmbed';
+import { INSTAGRAM_REELS } from '../lib/generated-instagram-reels';
 import {
   SITE_NAME,
   SITE_URL,
@@ -13,7 +14,6 @@ import {
   STUDIO_ADDRESS,
   STUDIO_PHONE,
   GALLERY_IMAGES,
-  INSTAGRAM_REELS,
   PHILOSOPHY_QUOTE,
   PROCESS_STEPS,
   FAQS,
@@ -332,14 +332,14 @@ export default function TonyWulfmanArt() {
               style={{ scrollbarWidth: 'thin' }}
               aria-label="Tony Wulfman Instagram reel gallery"
             >
-              {INSTAGRAM_REELS.map((postId, index) => (
+              {INSTAGRAM_REELS.map((reel, index) => (
                 <Reveal
-                  key={postId}
+                  key={reel.id}
                   delay={(index % 3) * 60}
                   className="w-[88vw] max-w-[430px] shrink-0 snap-start sm:w-[420px]"
                 >
                   <div className="overflow-hidden border border-ink-950/10 bg-white shadow-sm">
-                    <InstagramEmbed postId={postId} />
+                    <InstagramEmbed postId={reel.id} permalink={reel.permalink} />
                   </div>
                 </Reveal>
               ))}
