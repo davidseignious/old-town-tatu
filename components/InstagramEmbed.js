@@ -9,7 +9,9 @@ export default function InstagramEmbed({ postId, permalink }) {
 
   useEffect(() => {
         const process = () => {
-                if (window.instgrm) window.instgrm.Embeds.process();
+                if (!window.instgrm) return;
+                window.instgrm.Embeds.process();
+                window.setTimeout(() => window.instgrm?.Embeds?.process(), 350);
         };
 
                 if (window.instgrm) {
