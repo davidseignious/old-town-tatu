@@ -71,161 +71,63 @@ function isTattooReel(node) {
 }
 
 async function main() {
-  const headers = {
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/136 Safari/537.36',
-    'X-IG-App-ID': '936619743392459',
-    'Accept': '*/*',
-    'Accept-Language': 'en-US,en;q=0.9',
-    'Referer': 'https://www.instagram.com/' + USERNAME + '/',
-  };
-
   try {
-    const candidateMap = new Map();
-    let publicUserId = null;
-
-    const addCandidate = (candidate) => {
-      if (!candidate?.shortcode || HARD_BLOCKED_IDS.has(candidate.shortcode)) return;
-      const existing = candidateMap.get(candidate.shortcode);
-      if (!existing) {
-        candidateMap.set(candidate.shortcode, candidate);
-        return;
+    const response = await fetch(
+      'https://www.instagram.com/api/v1/users/web_profile_info/?username=' + encodeURIComponent(USERNAME),
+      {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/136 Safari/537.36',
+          'X-IG-App-ID': '936619743392459',
+          'Accept': '*/*',
+          'Accept-Language': 'en-US,en;q=0.9',
+          'Referer': 'https://www.instagram.com/' + USERNAME + '/',
+        },
       }
-      // Prefer richer metadata when the same reel appears in more than one source.
-      if (!captionFor(existing) && captionFor(candidate)) {
-        candidateMap.set(candidate.shortcode, candidate);
-      }
-    };
+    );
 
-    // Source 1: Instagram's public profile/video timeline JSON.
-    try {
-      const response = await fetch(
-        'https://www.instagram.com/api/v1/users/web_profile_info/?username=' + encodeURIComponent(USERNAME),
-        { headers }
-      );
-
-      if (response.ok) {
-        const json = await response.json();
-        const user = json?.data?.user || {};
-        publicUserId = user?.id || null;
-        const videoEdges = user?.edge_felix_video_timeline?.edges || [];
-        const timelineEdges = user?.edge_owner_to_timeline_media?.edges || [];
-
-        for (const edge of [...videoEdges, ...timelineEdges]) {
-          const node = edge?.node;
-          if (node?.is_video && node?.shortcode) addCandidate(node);
-        }
-      } else {
-        console.warn('[instagram] profile JSON returned', response.status);
-      }
-    } catch (error) {
-      console.warn('[instagram] profile JSON fetch failed:', error?.message || error);
+    if (!response.ok) {
+      console.warn('[instagram] public profile request failed:', response.status);
+      return;
     }
 
-    // Source 2: Instagram's public user feed endpoint. This typically returns
-    // a larger batch than the lightweight profile timeline.
-    if (publicUserId) {
-      try {
-        const response = await fetch(
-          'https://www.instagram.com/api/v1/feed/user/' + publicUserId + '/?count=50',
-          { headers }
-        );
+    const json = await response.json();
+    const user = json?.data?.user || {};
+    const videoEdges = user?.edge_felix_video_timeline?.edges || [];
+    const timelineEdges = user?.edge_owner_to_timeline_media?.edges || [];
 
-        if (response.ok) {
-          const json = await response.json();
-          for (const item of json?.items || []) {
-            const isVideo =
-              item?.media_type === 2 ||
-              item?.product_type === 'clips' ||
-              Array.isArray(item?.video_versions);
+    const allVideoNodes = [...videoEdges, ...timelineEdges]
+      .map((edge) => edge.node)
+      .filter((node) => node?.is_video && node?.shortcode);
 
-            if (!isVideo || !item?.code) continue;
-
-            addCandidate({
-              shortcode: item.code,
-              is_video: true,
-              product_type: item.product_type || null,
-              video_view_count: item.view_count || item.play_count || null,
-              edge_media_to_caption: {
-                edges: item?.caption?.text
-                  ? [{ node: { text: item.caption.text } }]
-                  : [],
-              },
-              display_url: item?.image_versions2?.candidates?.[0]?.url || null,
-            });
-          }
-        } else {
-          console.warn('[instagram] user feed returned', response.status);
-        }
-      } catch (error) {
-        console.warn('[instagram] user feed fetch failed:', error?.message || error);
+    const deduped = [];
+    const seen = new Set();
+    for (const node of allVideoNodes) {
+      if (!seen.has(node.shortcode)) {
+        seen.add(node.shortcode);
+        deduped.push(node);
       }
     }
-
-    // Source 3: public Reels page HTML. Instagram sometimes exposes more reel
-    // shortcodes here than it returns in the JSON endpoints.
-    try {
-      const response = await fetch('https://www.instagram.com/' + USERNAME + '/reels/', { headers });
-      if (response.ok) {
-        const html = await response.text();
-        const codePatterns = [
-          /"shortcode":"([A-Za-z0-9_-]+)"/g,
-          /"code":"([A-Za-z0-9_-]+)"/g,
-        ];
-
-        for (const pattern of codePatterns) {
-          let match;
-          while ((match = pattern.exec(html))) {
-            const shortcode = match[1];
-            if (!shortcode || HARD_BLOCKED_IDS.has(shortcode)) continue;
-
-            const left = Math.max(0, match.index - 2200);
-            const right = Math.min(html.length, match.index + 2200);
-            const context = html.slice(left, right).toLowerCase();
-
-            // Don't admit obvious booking/promotional material from the HTML-only pool.
-            if (rejectedWords.some((word) => context.includes(word))) continue;
-
-            addCandidate({
-              shortcode,
-              is_video: true,
-              __htmlContext: context,
-              edge_media_to_caption: { edges: [] },
-            });
-          }
-        }
-      } else {
-        console.warn('[instagram] reels HTML returned', response.status);
-      }
-    } catch (error) {
-      console.warn('[instagram] reels HTML fetch failed:', error?.message || error);
-    }
-
-    const deduped = [...candidateMap.values()];
 
     const isRejected = (node) => {
+      // The three reels the user explicitly supplied by screenshot override older guessed exclusions.
       if (requestedScreenshotScore(node) > 0) return false;
       if (HARD_BLOCKED_IDS.has(node.shortcode)) return true;
-      const text = metadataText(node);
-      return rejectedWords.some((word) => text.includes(word));
+      const caption = captionFor(node).toLowerCase();
+      return rejectedWords.some((word) => caption.includes(word));
     };
+
+    const strongTattooMatches = deduped.filter((node) => isTattooReel(node));
+    const otherNonPromoVideos = deduped.filter(
+      (node) => !isRejected(node) && !strongTattooMatches.some((match) => match.shortcode === node.shortcode)
+    );
 
     const requestedFromScreenshots = deduped
       .filter((node) => !isRejected(node) && requestedScreenshotScore(node) > 0)
       .sort((a, b) => requestedScreenshotScore(b) - requestedScreenshotScore(a));
 
-    const strongTattooMatches = deduped.filter((node) => !isRejected(node) && isTattooReel(node));
-
-    const otherNonPromoVideos = deduped.filter(
-      (node) =>
-        !isRejected(node) &&
-        !requestedFromScreenshots.some((match) => match.shortcode === node.shortcode) &&
-        !strongTattooMatches.some((match) => match.shortcode === node.shortcode)
-    );
-
     const combined = [...requestedFromScreenshots, ...strongTattooMatches, ...otherNonPromoVideos];
     const selected = [];
     const selectedIds = new Set();
-
     for (const node of combined) {
       if (!selectedIds.has(node.shortcode)) {
         selectedIds.add(node.shortcode);
@@ -233,7 +135,6 @@ async function main() {
       }
       if (selected.length >= 12) break;
     }
-
     const reels = selected.map((node) => ({
       id: node.shortcode,
       permalink: 'https://www.instagram.com/p/' + node.shortcode + '/',
@@ -243,10 +144,9 @@ async function main() {
       throw new Error('[instagram] need at least 8 usable public video posts; found ' + reels.length);
     }
 
-    const file =
-      "// Auto-generated at build time from Tony Wulfman's public Instagram.\n" +
-      "// Booking/promotional posts and rejected subjects are filtered out.\n" +
-      'export const INSTAGRAM_REELS = ' + JSON.stringify(reels, null, 2) + ';\n';
+    const file = "// Auto-generated at build time from Tony Wulfman's public Instagram.\\n" +
+      "// Booking/promotional posts and rejected subjects are filtered out.\\n" +
+      'export const INSTAGRAM_REELS = ' + JSON.stringify(reels, null, 2) + ';\\n';
 
     fs.writeFileSync(OUTPUT, file);
     console.log(
