@@ -109,6 +109,8 @@ async function main() {
     }
 
     const isRejected = (node) => {
+      // The three reels the user explicitly supplied by screenshot override older guessed exclusions.
+      if (requestedScreenshotScore(node) > 0) return false;
       if (HARD_BLOCKED_IDS.has(node.shortcode)) return true;
       const caption = captionFor(node).toLowerCase();
       return rejectedWords.some((word) => caption.includes(word));
