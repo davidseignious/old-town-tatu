@@ -91,6 +91,13 @@ async function main() {
       permalink: 'https://www.instagram.com/reel/' + node.shortcode + '/',
     }));
 
+    const debugRows = selected.map((node) => ({
+      id: node.shortcode,
+      permalink: 'https://www.instagram.com/reel/' + node.shortcode + '/',
+      caption: captionFor(node),
+      thumbnail: node.display_url || node.thumbnail_src || null,
+    }));
+
     if (reels.length < 8) {
       throw new Error('[instagram] need at least 8 usable public video posts; found ' + reels.length);
     }
@@ -100,6 +107,10 @@ async function main() {
       'export const INSTAGRAM_REELS = ' + JSON.stringify(reels, null, 2) + ';\\n';
 
     fs.writeFileSync(OUTPUT, file);
+    fs.writeFileSync(
+      path.join(process.cwd(), 'public', 'reels-debug.json'),
+      JSON.stringify(debugRows, null, 2)
+    );
     console.log('[instagram] generated tattoo reels:', reels.map((r) => r.id).join(', '));
   } catch (error) {
     console.warn('[instagram] fetch failed; keeping fallback reel:', error?.message || error);
