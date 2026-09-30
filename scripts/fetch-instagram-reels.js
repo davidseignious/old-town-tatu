@@ -72,8 +72,8 @@ async function main() {
       return;
     }
 
-    const file = '// Auto-generated at build time from Tony Wulfman\\'s public Instagram.\\n' +
-      '// Booking/promotional posts and rejected subjects are filtered out.\\n' +
+    const file = "// Auto-generated at build time from Tony Wulfman's public Instagram.\\n" +
+      "// Booking/promotional posts and rejected subjects are filtered out.\\n" +
       'export const INSTAGRAM_REELS = ' + JSON.stringify(reels, null, 2) + ';\\n';
 
     fs.writeFileSync(OUTPUT, file);
