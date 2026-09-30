@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import Head from 'next/head';
 import { ChevronDown, ChevronLeft, ChevronRight, Instagram, Mail, MapPin, Phone } from 'lucide-react';
 import { LOGO_DATA_URI, FAVICON_DATA_URI } from '../lib/logo';
@@ -12,8 +12,8 @@ import {
   BOOKING_EMAIL,
   STUDIO_ADDRESS,
   STUDIO_PHONE,
-  PORTFOLIO_POSTS,
-  PORTFOLIO_FILTERS,
+  GALLERY_IMAGES,
+  INSTAGRAM_REELS,
   PHILOSOPHY_QUOTE,
   PROCESS_STEPS,
   FAQS,
@@ -40,7 +40,6 @@ const REVIEW = {
 };
 
 export default function TonyWulfmanArt() {
-  const [filter, setFilter] = useState('All');
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
   const instagramCarouselRef = useRef(null);
@@ -52,10 +51,6 @@ export default function TonyWulfmanArt() {
     carousel.scrollBy({ left: direction * amount, behavior: 'smooth' });
   };
 
-  const visiblePosts = useMemo(
-    () => (filter === 'All' ? PORTFOLIO_POSTS : PORTFOLIO_POSTS.filter((post) => post.tag === filter)),
-    [filter]
-  );
 
   const personSchema = {
     '@context': 'https://schema.org',
@@ -254,123 +249,110 @@ export default function TonyWulfmanArt() {
           <Reveal>
             <div className="mb-12 flex flex-col gap-7 md:flex-row md:items-end md:justify-between">
               <div>
-                <p className="mb-4 font-sans text-xs uppercase tracking-[0.3em] text-oxblood-600">Selected Work</p>
+                <p className="mb-4 font-sans text-xs uppercase tracking-[0.3em] text-oxblood-600">Gallery</p>
                 <h2 className="max-w-2xl font-serif text-4xl tracking-tight md:text-6xl">
-                  The work should speak before the sales pitch does.
+                  Finished tattoo work by Tony.
                 </h2>
               </div>
               <p className="max-w-sm font-sans text-sm leading-relaxed text-ink-500">
-                Portfolio pulled from{' '}
-                <a href={IG_URL} target="_blank" rel="noreferrer" className="underline underline-offset-4 hover:text-oxblood-600">
-                  @{IG_HANDLE}
-                </a>
-                . Real tattoos, real clients, no stock work.
+                A photo gallery of Tony’s work. Pieces are shown without forcing every tattoo into a size category.
               </p>
             </div>
           </Reveal>
 
-          <Reveal delay={100}>
-            <div className="mb-10 flex flex-wrap gap-3">
-              {PORTFOLIO_FILTERS.map((item) => (
-                <button
-                  type="button"
-                  key={item}
-                  onClick={() => setFilter(item)}
-                  className={`rounded-full border px-5 py-2 font-sans text-xs uppercase tracking-widest transition-colors ${
-                    filter === item
-                      ? 'border-ink-950 bg-ink-950 text-bone-50'
-                      : 'border-ink-950/20 text-ink-800 hover:border-ink-950'
-                  }`}
+          <div className="grid gap-6 md:grid-cols-3">
+            {GALLERY_IMAGES.map((image, index) => (
+              <Reveal key={image.id} delay={index * 70}>
+                <a
+                  href={image.src}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group block overflow-hidden border border-ink-950/10 bg-ink-950 shadow-sm"
                 >
-                  {item}
-                </button>
-              ))}
-            </div>
-          </Reveal>
-
-          <Reveal delay={120}>
-            <div className="mb-6 flex items-center justify-between gap-4">
-              <a
-                href={IG_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 font-sans text-sm text-ink-600 transition-colors hover:text-oxblood-600"
-              >
-                <Instagram size={18} />
-                <span>Follow @{IG_HANDLE}</span>
-              </a>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => scrollInstagram(-1)}
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-ink-950/20 transition-colors hover:border-ink-950 hover:bg-ink-950 hover:text-bone-50"
-                  aria-label="Previous Instagram posts"
-                >
-                  <ChevronLeft size={20} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => scrollInstagram(1)}
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-ink-950/20 transition-colors hover:border-ink-950 hover:bg-ink-950 hover:text-bone-50"
-                  aria-label="Next Instagram posts"
-                >
-                  <ChevronRight size={20} />
-                </button>
-              </div>
-            </div>
-          </Reveal>
-
-          <div
-            ref={instagramCarouselRef}
-            className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-4"
-            style={{ scrollbarWidth: 'thin' }}
-            aria-label="Tony Wulfman Instagram photo carousel"
-          >
-            {visiblePosts.map((post, index) => (
-              <Reveal
-                key={post.id}
-                delay={(index % 3) * 60}
-                className="w-[88vw] max-w-[430px] shrink-0 snap-start sm:w-[420px]"
-              >
-                <div className="overflow-hidden border border-ink-950/10 bg-white shadow-sm">
-                  {post.type === 'image' ? (
-                    <a
-                      href={IG_URL}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="group block bg-ink-950"
-                      aria-label="View Tony Wulfman on Instagram"
-                    >
-                      <div className="flex aspect-[4/5] items-center justify-center overflow-hidden bg-ink-950">
-                        <img
-                          src={post.src}
-                          alt={post.alt}
-                          loading="lazy"
-                          className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.02]"
-                        />
-                      </div>
-                      <div className="flex items-center justify-between gap-3 border-t border-bone-50/10 bg-ink-950 px-4 py-3 text-bone-50">
-                        <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-brass-400">Large-scale work</span>
-                        <span className="flex items-center gap-1.5 font-sans text-xs text-bone-100/75">
-                          <Instagram size={14} /> @{IG_HANDLE}
-                        </span>
-                      </div>
-                    </a>
-                  ) : (
-                    <InstagramEmbed postId={post.id} />
-                  )}
-                </div>
+                  <div className="flex aspect-[4/5] items-center justify-center overflow-hidden bg-ink-950">
+                    <img
+                      src={image.src}
+                      alt={image.alt}
+                      loading="lazy"
+                      className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.02]"
+                    />
+                  </div>
+                  <div className="border-t border-bone-50/10 bg-ink-950 px-4 py-3 text-bone-50">
+                    <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-brass-400">Selected work</span>
+                  </div>
+                </a>
               </Reveal>
             ))}
           </div>
 
-          <Reveal>
-            <div className="mt-10 text-center">
-              <a href={IG_URL} target="_blank" rel="noreferrer" className="btn-ghost">
-                <Instagram size={16} className="mr-2" /> View @{IG_HANDLE} on Instagram
-              </a>
+          <div className="mt-20 border-t border-ink-950/10 pt-16">
+            <Reveal>
+              <div className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="mb-3 font-sans text-xs uppercase tracking-[0.3em] text-oxblood-600">Instagram Reels</p>
+                  <h3 className="font-serif text-3xl tracking-tight md:text-5xl">See the work in motion.</h3>
+                  <p className="mt-4 max-w-2xl font-sans text-sm leading-relaxed text-ink-500">
+                    A separate reel gallery with larger pieces, close-up detail, and finished tattoo work.
+                  </p>
+                </div>
+                <a
+                  href={IG_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 font-sans text-sm text-ink-600 transition-colors hover:text-oxblood-600"
+                >
+                  <Instagram size={18} />
+                  <span>Follow @{IG_HANDLE}</span>
+                </a>
+              </div>
+            </Reveal>
+
+            <div className="mb-6 flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => scrollInstagram(-1)}
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-ink-950/20 transition-colors hover:border-ink-950 hover:bg-ink-950 hover:text-bone-50"
+                aria-label="Previous Instagram reels"
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollInstagram(1)}
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-ink-950/20 transition-colors hover:border-ink-950 hover:bg-ink-950 hover:text-bone-50"
+                aria-label="Next Instagram reels"
+              >
+                <ChevronRight size={20} />
+              </button>
             </div>
-          </Reveal>
+
+            <div
+              ref={instagramCarouselRef}
+              className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-4"
+              style={{ scrollbarWidth: 'thin' }}
+              aria-label="Tony Wulfman Instagram reel gallery"
+            >
+              {INSTAGRAM_REELS.map((postId, index) => (
+                <Reveal
+                  key={postId}
+                  delay={(index % 3) * 60}
+                  className="w-[88vw] max-w-[430px] shrink-0 snap-start sm:w-[420px]"
+                >
+                  <div className="overflow-hidden border border-ink-950/10 bg-white shadow-sm">
+                    <InstagramEmbed postId={postId} />
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+
+            <Reveal>
+              <div className="mt-10 text-center">
+                <a href={IG_URL} target="_blank" rel="noreferrer" className="btn-ghost">
+                  <Instagram size={16} className="mr-2" /> View @{IG_HANDLE} on Instagram
+                </a>
+              </div>
+            </Reveal>
+          </div>
         </section>
 
         <section id="about" className="bg-ink-900 py-24 text-bone-50 md:py-28">
