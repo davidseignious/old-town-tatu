@@ -57,18 +57,46 @@ async function main() {
     }
 
     const json = await response.json();
-    const edges = json?.data?.user?.edge_owner_to_timeline_media?.edges || [];
-    const reels = edges
+    const user = json?.data?.user || {};
+    const videoEdges = user?.edge_felix_video_timeline?.edges || [];
+    const timelineEdges = user?.edge_owner_to_timeline_media?.edges || [];
+
+    const allVideoNodes = [...videoEdges, ...timelineEdges]
       .map((edge) => edge.node)
-      .filter(isTattooReel)
-      .slice(0, 12)
-      .map((node) => ({
-        id: node.shortcode,
-        permalink: 'https://www.instagram.com/reel/' + node.shortcode + '/',
-      }));
+      .filter((node) => node?.is_video && node?.shortcode);
+
+    const deduped = [];
+    const seen = new Set();
+    for (const node of allVideoNodes) {
+      if (!seen.has(node.shortcode)) {
+        seen.add(node.shortcode);
+        deduped.push(node);
+      }
+    }
+
+    const isRejected = (node) => {
+      if (HARD_BLOCKED_IDS.has(node.shortcode)) return true;
+      const caption = captionFor(node).toLowerCase();
+      return rejectedWords.some((word) => caption.includes(word));
+    };
+
+    const strongTattooMatches = deduped.filter((node) => isTattooReel(node));
+    const otherNonPromoVideos = deduped.filter(
+      (node) => !isRejected(node) && !strongTattooMatches.some((match) => match.shortcode === node.shortcode)
+    );
+
+    const selected = [...strongTattooMatches, ...otherNonPromoVideos].slice(0, 12);
+    const reels = selected.map((node) => ({
+      id: node.shortcode,
+      permalink: 'https://www.instagram.com/reel/' + node.shortcode + '/',
+    }));
+
+    if (reels.length < 8) {
+      console.warn('[instagram] fewer than 8 public video posts were returned:', reels.length);
+    }
 
     if (!reels.length) {
-      console.warn('[instagram] no tattoo-only public video posts passed the filter; keeping fallback reel');
+      console.warn('[instagram] no usable public video posts were returned; keeping fallback reel');
       return;
     }
 
