@@ -92,12 +92,7 @@ async function main() {
     }));
 
     if (reels.length < 8) {
-      console.warn('[instagram] fewer than 8 public video posts were returned:', reels.length);
-    }
-
-    if (!reels.length) {
-      console.warn('[instagram] no usable public video posts were returned; keeping fallback reel');
-      return;
+      throw new Error('[instagram] need at least 8 usable public video posts; found ' + reels.length);
     }
 
     const file = "// Auto-generated at build time from Tony Wulfman's public Instagram.\\n" +
