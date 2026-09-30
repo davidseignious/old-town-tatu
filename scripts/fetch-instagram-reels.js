@@ -15,7 +15,7 @@ const rejectedWords = [
   'booking out', 'booking', 'book now', 'book with', 'appointment', 'appointments',
   'availability', 'available', 'openings', 'spots open', 'spot open', 'dm to book',
   'dm me', 'schedule', 'deposit', 'flash sale', 'discount',
-  'skull', 'spider', 'astronaut',
+  'skull', 'astronaut',
 ];
 
 const tattooWords = [
@@ -27,6 +27,40 @@ const tattooWords = [
 
 function captionFor(node) {
   return node?.edge_media_to_caption?.edges?.[0]?.node?.text || '';
+}
+
+function metadataText(node) {
+  try {
+    return (captionFor(node) + ' ' + JSON.stringify(node)).toLowerCase();
+  } catch {
+    return captionFor(node).toLowerCase();
+  }
+}
+
+function requestedScreenshotScore(node) {
+  const text = metadataText(node);
+  let score = 0;
+
+  // Dragon back-piece screenshot: caption tags @cielos_fitness; audio shows DEPORTIVO.
+  if (text.includes('cielos_fitness') || text.includes('deportivo')) score += 100;
+
+  // Tiger forearm screenshot: visible caption + BbY WOW audio.
+  if (
+    text.includes('artist') && text.includes('tattooer') && text.includes('creator') ||
+    text.includes('obsessed with creating') ||
+    text.includes('bby wow') ||
+    text.includes('karol g')
+  ) score += 95;
+
+  // Spider-web screenshot: motivational 10,000-hours overlay / omari.too audio.
+  if (
+    text.includes('10,000 hours') ||
+    text.includes('10000 hours') ||
+    text.includes('next level') ||
+    text.includes('omari.too')
+  ) score += 90;
+
+  return score;
 }
 
 function isTattooReel(node) {
@@ -85,17 +119,23 @@ async function main() {
       (node) => !isRejected(node) && !strongTattooMatches.some((match) => match.shortcode === node.shortcode)
     );
 
-    const selected = [...strongTattooMatches, ...otherNonPromoVideos].slice(0, 12);
+    const requestedFromScreenshots = deduped
+      .filter((node) => !isRejected(node) && requestedScreenshotScore(node) > 0)
+      .sort((a, b) => requestedScreenshotScore(b) - requestedScreenshotScore(a));
+
+    const combined = [...requestedFromScreenshots, ...strongTattooMatches, ...otherNonPromoVideos];
+    const selected = [];
+    const selectedIds = new Set();
+    for (const node of combined) {
+      if (!selectedIds.has(node.shortcode)) {
+        selectedIds.add(node.shortcode);
+        selected.push(node);
+      }
+      if (selected.length >= 12) break;
+    }
     const reels = selected.map((node) => ({
       id: node.shortcode,
       permalink: 'https://www.instagram.com/reel/' + node.shortcode + '/',
-    }));
-
-    const debugRows = selected.map((node) => ({
-      id: node.shortcode,
-      permalink: 'https://www.instagram.com/reel/' + node.shortcode + '/',
-      caption: captionFor(node),
-      thumbnail: node.display_url || node.thumbnail_src || null,
     }));
 
     if (reels.length < 8) {
@@ -107,11 +147,14 @@ async function main() {
       'export const INSTAGRAM_REELS = ' + JSON.stringify(reels, null, 2) + ';\\n';
 
     fs.writeFileSync(OUTPUT, file);
-    fs.writeFileSync(
-      path.join(process.cwd(), 'public', 'reels-debug.json'),
-      JSON.stringify(debugRows, null, 2)
+    console.log(
+      '[instagram] generated tattoo reels:',
+      selected.map((node) => ({
+        id: node.shortcode,
+        requestedScore: requestedScreenshotScore(node),
+        caption: captionFor(node).slice(0, 80),
+      }))
     );
-    console.log('[instagram] generated tattoo reels:', reels.map((r) => r.id).join(', '));
   } catch (error) {
     console.warn('[instagram] fetch failed; keeping fallback reel:', error?.message || error);
   }
