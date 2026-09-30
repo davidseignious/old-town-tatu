@@ -86,8 +86,7 @@ async function main() {
     );
 
     if (!response.ok) {
-      console.warn('[instagram] public profile request failed:', response.status);
-      return;
+      throw new Error('[instagram] public profile request failed: ' + response.status);
     }
 
     const json = await response.json();
