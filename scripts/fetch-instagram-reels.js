@@ -81,6 +81,7 @@ async function main() {
 
   try {
     const candidateMap = new Map();
+    let publicUserId = null;
 
     const addCandidate = (candidate) => {
       if (!candidate?.shortcode || HARD_BLOCKED_IDS.has(candidate.shortcode)) return;
@@ -105,6 +106,7 @@ async function main() {
       if (response.ok) {
         const json = await response.json();
         const user = json?.data?.user || {};
+        publicUserId = user?.id || null;
         const videoEdges = user?.edge_felix_video_timeline?.edges || [];
         const timelineEdges = user?.edge_owner_to_timeline_media?.edges || [];
 
@@ -119,8 +121,48 @@ async function main() {
       console.warn('[instagram] profile JSON fetch failed:', error?.message || error);
     }
 
-    // Source 2: public Reels page HTML. Instagram sometimes exposes more reel
-    // shortcodes here than it returns in the profile JSON timeline.
+    // Source 2: Instagram's public user feed endpoint. This typically returns
+    // a larger batch than the lightweight profile timeline.
+    if (publicUserId) {
+      try {
+        const response = await fetch(
+          'https://www.instagram.com/api/v1/feed/user/' + publicUserId + '/?count=50',
+          { headers }
+        );
+
+        if (response.ok) {
+          const json = await response.json();
+          for (const item of json?.items || []) {
+            const isVideo =
+              item?.media_type === 2 ||
+              item?.product_type === 'clips' ||
+              Array.isArray(item?.video_versions);
+
+            if (!isVideo || !item?.code) continue;
+
+            addCandidate({
+              shortcode: item.code,
+              is_video: true,
+              product_type: item.product_type || null,
+              video_view_count: item.view_count || item.play_count || null,
+              edge_media_to_caption: {
+                edges: item?.caption?.text
+                  ? [{ node: { text: item.caption.text } }]
+                  : [],
+              },
+              display_url: item?.image_versions2?.candidates?.[0]?.url || null,
+            });
+          }
+        } else {
+          console.warn('[instagram] user feed returned', response.status);
+        }
+      } catch (error) {
+        console.warn('[instagram] user feed fetch failed:', error?.message || error);
+      }
+    }
+
+    // Source 3: public Reels page HTML. Instagram sometimes exposes more reel
+    // shortcodes here than it returns in the JSON endpoints.
     try {
       const response = await fetch('https://www.instagram.com/' + USERNAME + '/reels/', { headers });
       if (response.ok) {
