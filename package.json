@@ -4,7 +4,7 @@
   "description": "Old Town Tatu - Professional tattoo artist website with booking",
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/fetch-instagram-reels.js && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
