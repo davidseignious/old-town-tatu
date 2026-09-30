@@ -137,7 +137,7 @@ async function main() {
     }
     const reels = selected.map((node) => ({
       id: node.shortcode,
-      permalink: 'https://www.instagram.com/reel/' + node.shortcode + '/',
+      permalink: 'https://www.instagram.com/p/' + node.shortcode + '/',
     }));
 
     if (reels.length < 8) {
@@ -158,7 +158,9 @@ async function main() {
       }))
     );
   } catch (error) {
-    console.warn('[instagram] fetch failed; keeping fallback reel:', error?.message || error);
+    console.error('[instagram] reel generation failed:', error?.message || error);
+    process.exitCode = 1;
+    throw error;
   }
 }
 
