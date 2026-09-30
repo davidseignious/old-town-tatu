@@ -1,0 +1,86 @@
+const fs = require('fs');
+const path = require('path');
+
+const USERNAME = 'tonywulfman.art';
+const OUTPUT = path.join(process.cwd(), 'lib', 'generated-instagram-reels.js');
+const HARD_BLOCKED_IDS = new Set([
+  'Dcjy0dVQsOs',
+  'Dchw2bdt3rV',
+  'DcfDzlxtXZQ',
+  'DbrR0zozlw7',
+  'Db_X0i3zNdR',
+]);
+
+const rejectedWords = [
+  'booking out', 'booking', 'book now', 'book with', 'appointment', 'appointments',
+  'availability', 'available', 'openings', 'spots open', 'spot open', 'dm to book',
+  'dm me', 'schedule', 'deposit', 'flash sale', 'discount',
+  'skull', 'spider', 'astronaut',
+];
+
+const tattooWords = [
+  'tattoo', 'tattoos', 'tattooed', 'ink', 'inked', 'piece', 'sleeve',
+  'black and grey', 'black & grey', 'blackwork', 'fine line', 'fineline',
+  'realism', 'portrait', 'geometric', 'ornamental', 'floral', 'religious',
+  'micro realism', 'micro-realism', 'cover up', 'cover-up', 'whip shading',
+];
+
+function captionFor(node) {
+  return node?.edge_media_to_caption?.edges?.[0]?.node?.text || '';
+}
+
+function isTattooReel(node) {
+  if (!node?.is_video || !node?.shortcode || HARD_BLOCKED_IDS.has(node.shortcode)) return false;
+  const caption = captionFor(node).toLowerCase();
+  if (rejectedWords.some((word) => caption.includes(word))) return false;
+  return tattooWords.some((word) => caption.includes(word));
+}
+
+async function main() {
+  try {
+    const response = await fetch(
+      'https://www.instagram.com/api/v1/users/web_profile_info/?username=' + encodeURIComponent(USERNAME),
+      {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/136 Safari/537.36',
+          'X-IG-App-ID': '936619743392459',
+          'Accept': '*/*',
+          'Accept-Language': 'en-US,en;q=0.9',
+          'Referer': 'https://www.instagram.com/' + USERNAME + '/',
+        },
+      }
+    );
+
+    if (!response.ok) {
+      console.warn('[instagram] public profile request failed:', response.status);
+      return;
+    }
+
+    const json = await response.json();
+    const edges = json?.data?.user?.edge_owner_to_timeline_media?.edges || [];
+    const reels = edges
+      .map((edge) => edge.node)
+      .filter(isTattooReel)
+      .slice(0, 12)
+      .map((node) => ({
+        id: node.shortcode,
+        permalink: 'https://www.instagram.com/reel/' + node.shortcode + '/',
+      }));
+
+    if (!reels.length) {
+      console.warn('[instagram] no tattoo-only public video posts passed the filter; keeping fallback reel');
+      return;
+    }
+
+    const file = '// Auto-generated at build time from Tony Wulfman\\'s public Instagram.\\n' +
+      '// Booking/promotional posts and rejected subjects are filtered out.\\n' +
+      'export const INSTAGRAM_REELS = ' + JSON.stringify(reels, null, 2) + ';\\n';
+
+    fs.writeFileSync(OUTPUT, file);
+    console.log('[instagram] generated tattoo reels:', reels.map((r) => r.id).join(', '));
+  } catch (error) {
+    console.warn('[instagram] fetch failed; keeping fallback reel:', error?.message || error);
+  }
+}
+
+main();
