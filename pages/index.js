@@ -1,6 +1,6 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import Head from 'next/head';
-import { ChevronDown, ChevronLeft, ChevronRight, Instagram, Mail, MapPin, Phone } from 'lucide-react';
+import { ChevronDown, Instagram, Mail, MapPin, Phone } from 'lucide-react';
 import { LOGO_DATA_URI, FAVICON_DATA_URI } from '../lib/logo';
 import Reveal from '../components/Reveal';
 import InstagramEmbed from '../components/InstagramEmbed';
@@ -42,15 +42,6 @@ const REVIEW = {
 export default function TonyWulfmanArt() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
-  const instagramCarouselRef = useRef(null);
-
-  const scrollInstagram = (direction) => {
-    const carousel = instagramCarouselRef.current;
-    if (!carousel) return;
-    const amount = Math.min(carousel.clientWidth * 0.9, 440);
-    carousel.scrollBy({ left: direction * amount, behavior: 'smooth' });
-  };
-
 
   const personSchema = {
     '@context': 'https://schema.org',
@@ -307,36 +298,15 @@ export default function TonyWulfmanArt() {
               </div>
             </Reveal>
 
-            <div className="mb-6 flex justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => scrollInstagram(-1)}
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-ink-950/20 transition-colors hover:border-ink-950 hover:bg-ink-950 hover:text-bone-50"
-                aria-label="Previous Instagram reels"
-              >
-                <ChevronLeft size={20} />
-              </button>
-              <button
-                type="button"
-                onClick={() => scrollInstagram(1)}
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-ink-950/20 transition-colors hover:border-ink-950 hover:bg-ink-950 hover:text-bone-50"
-                aria-label="Next Instagram reels"
-              >
-                <ChevronRight size={20} />
-              </button>
-            </div>
-
             <div
-              ref={instagramCarouselRef}
-              className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-4"
-              style={{ scrollbarWidth: 'thin' }}
+              className="grid gap-6 md:grid-cols-2 xl:grid-cols-3"
               aria-label="Tony Wulfman Instagram reel gallery"
             >
               {INSTAGRAM_REELS.map((reel, index) => (
                 <Reveal
                   key={reel.id}
                   delay={(index % 3) * 60}
-                  className="w-[88vw] max-w-[430px] shrink-0 snap-start sm:w-[420px]"
+                  className="min-w-0"
                 >
                   <div className="overflow-hidden border border-ink-950/10 bg-white shadow-sm">
                     <InstagramEmbed postId={reel.id} permalink={reel.permalink} />
