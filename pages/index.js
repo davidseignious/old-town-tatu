@@ -333,7 +333,32 @@ export default function TonyWulfmanArt() {
                 className="w-[88vw] max-w-[430px] shrink-0 snap-start sm:w-[420px]"
               >
                 <div className="overflow-hidden border border-ink-950/10 bg-white shadow-sm">
-                  <InstagramEmbed postId={post.id} />
+                  {post.type === 'image' ? (
+                    <a
+                      href={IG_URL}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group block bg-ink-950"
+                      aria-label="View Tony Wulfman on Instagram"
+                    >
+                      <div className="flex aspect-[4/5] items-center justify-center overflow-hidden bg-ink-950">
+                        <img
+                          src={post.src}
+                          alt={post.alt}
+                          loading="lazy"
+                          className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.02]"
+                        />
+                      </div>
+                      <div className="flex items-center justify-between gap-3 border-t border-bone-50/10 bg-ink-950 px-4 py-3 text-bone-50">
+                        <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-brass-400">Large-scale work</span>
+                        <span className="flex items-center gap-1.5 font-sans text-xs text-bone-100/75">
+                          <Instagram size={14} /> @{IG_HANDLE}
+                        </span>
+                      </div>
+                    </a>
+                  ) : (
+                    <InstagramEmbed postId={post.id} />
+                  )}
                 </div>
               </Reveal>
             ))}
